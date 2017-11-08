@@ -1,57 +1,61 @@
-function candySalesToObject(array) {
-  var candyObj = {};
-  candyObj.item = array[0];
-  candyObj.price = Number(array[1]);
-  candyObj.quantity = array[2];
-  return candyObj;
+function candySalesToObject(candy){
+  return candy.reduce(function(accumulator, item, index){
+  switch(index){
+    case 0:
+      accumulator.item = item;
+      break;
+    case 1:
+      accumulator.price = item;
+      break;
+    case 2:
+      accumulator.quantity = item;
+      break;
+    default:
+      return;
+  }
+  return accumulator;
+},
+{});
 }
 
-//THIS FUNCTION WORKS FOR THE README.MD INSTRUCTIONS
-//
-//function salesDayToObject(date, array){
-//   var dayObj = {date: date, sales: []};
-//   for(var i = 0; i < array.length; i++) {
-//     var candyObj = {};
-//     candyObj.item = array[i][0];
-//     candyObj.price = Number(array[i][1]);
-//     candyObj.quantity = array[i][2];
-//     dayObj.sales.push(candyObj);
-//   }
-//   return dayObj;
-// }
 
-//THIS FUNCTION PASSES THE EXERCISE-SPEC.JS TESTS
-function salesDayToObject(date, object){
-  var dayObj = {date: date, sales: []};
-  var dumbArray = Object.values(object);
-  for(var i = 0; i < dumbArray[0].length; i++) {
-    var candyObj = {};
-    candyObj.item = dumbArray[0][i][0];
-    candyObj.price = Number(dumbArray[0][i][1]);
-    candyObj.quantity = dumbArray[0][i][2];
-    dayObj.sales.push(candyObj);
+function salesDayToObject(day, saleObj){
+  var dayObj = {date: day, sales: []};
+  var saleValues = Object.values(saleObj);
+  for (var i = 0; i < saleValues[0].length; i++) {
+    dayObj.sales.push(saleValues[0][i].reduce(function(accumulator, item, index){
+      switch(index){
+        case 0:
+          accumulator.item = item;
+          break;
+        case 1:
+          accumulator.price = item;
+          break;
+        case 2:
+          accumulator.quantity = item;
+          break;
+        default:
+          break;
+      }
+    return accumulator;
+    },{}));
   }
   return dayObj;
 }
 
-function allSalesToArray(object) {
-  const completeArray = [];
-  var datesArray = Object.keys(object);
-  var itemArray = Object.values(object);
 
-  for (var i = 0; i < datesArray.length; i++) {
-    completeArray.push({date: datesArray[i], sales: []});
-  }
-
-  for (var k = 0; k < itemArray.length; k++)
-    for(var j = 0; j < itemArray[k].length; j++) {
-      var candyObj = {};
-      candyObj.item = itemArray[k][j][0];
-      candyObj.price = Number(itemArray[k][j][1]);
-      candyObj.quantity = itemArray[k][j][2];
-      completeArray[k].sales.push(candyObj);
-    }
-  return completeArray;
+function allSalesToArray(completeObj){
+  var finalSalesArray = [];
+  var dateKeys = Object.keys(completeObj);
+  dateKeys.map(function(unit){
+    var dayObj = {date: unit, sales: []};
+    completeObj[unit].map(function(item){
+      var oneItem = {item: item[0], price: item[1], quantity: item[2]};
+      dayObj.sales.push(oneItem);
+    });
+    finalSalesArray.push(dayObj);
+  });
+return finalSalesArray;
 }
 
 module.exports = {
