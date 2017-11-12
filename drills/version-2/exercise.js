@@ -5,18 +5,12 @@ function getItemById(itemList, number){
   return wantCandy[0];
 }
 
-function buildTransactions(salesList, itemsList) {
-  var salesForm = [];
-  var oneItem = {itemId: 0, description: "", price: 0, quantity: 0};
-  salesList.map(function(sale){
-    itemsList.map(function(item){
-      if (sale.itemId === item.id){
-      oneItem = {itemId: sale.itemId, description: item.description, price: Number(item.price), quantity: sale.quantity};
-      }
-    });
-    salesForm.push(oneItem);
+function buildTransactions(saleList, itemList){
+  return saleList.map(function(each){return Object.assign(each, getItemById(itemList, each.itemId));
+  }).map(function(each){
+      delete each.id;
+      return each;
   });
-  return salesForm;
 }
 
 function getTransactionsByItemDescription(fullList, description) {
